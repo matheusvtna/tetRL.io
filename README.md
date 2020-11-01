@@ -15,6 +15,28 @@ Execução de um modelo já treinado no ambiente. **OK**
 ### engine:
 Estrutura do Tetris, integração com o [tetr.io](https://uandersonricardo.github.io/tetr.io/) e estruturas do environment. **EM PROGRESSO**
 
+## Dependências 
+Para instalar as dependências, basta executar o script ... **EM CRIAÇÃO**
+
+Ou, de forma manual, instalar as bibliotecas:
+- [PyTorch](https://pytorch.org/).
+- [NumPy](https://anaconda.org/anaconda/numpy)
+
+## Como Treinar
+Para treinar um agente do zero, basta usar a seguinte linha de comando:
+~~~bash
+$ python dqn_agent
+~~~
+Para treinar um agente a partir de um Checkpoint, basta usar a seguinte linha de comando:
+~~~bash
+$ python dqn_agent checkpoint
+~~~
+
+## Como Executar
+Para executar um agente treinado, basta usar a seguinte linha de comando:
+~~~bash
+$ python run_model checkpoint
+~~~
 
 ## Equipe 
 - Alexandre Burle    [(aqb)](https://github.com/aqb)
