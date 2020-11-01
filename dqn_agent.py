@@ -92,8 +92,8 @@ class DQN(nn.Module):
         self.bn1 = nn.BatchNorm2d(16)
         self.conv2 = nn.Conv2d(16, 32, kernel_size=4, stride=2)
         self.bn2 = nn.BatchNorm2d(32)
-        self.lin1 = nn.Linear(768, 256)
-        self.head = nn.Linear(576, engine.nb_actions)
+        self.lin1 = nn.Linear(576, 256)
+        self.head = nn.Linear(256, engine.nb_actions)
 
     # Forward-propagation 
     def forward(self, x):
