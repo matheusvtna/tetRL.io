@@ -44,8 +44,9 @@ class TetrisEngine:
         self.value_action_map = {
             0: left,
             1: right,
-            2: rotate_right,
-            3: idle,
+            2: down,
+            3: rotate_right,
+            4: idle,
         }
         self.action_value_map = dict([(j, i) for i, j in self.value_action_map.items()])
         self.nb_actions = len(self.value_action_map)

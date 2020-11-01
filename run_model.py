@@ -13,7 +13,7 @@ FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
 
 # Criação do Tetris
-width, height = 10, 20 
+width, height = 10, 16 
 engine = TetrisEngine(width, height)
 
 # Carrega o modelo (Pesos da rede)

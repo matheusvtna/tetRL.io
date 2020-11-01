@@ -20,7 +20,7 @@ from engine import TetrisEngine
 # -----------------------------------------------------------------------------
 
 # Criação do Tetris
-width, height = 10, 20 
+width, height = 10, 16 
 engine = TetrisEngine(width, height)
 
 # CUDA
@@ -93,7 +93,7 @@ class DQN(nn.Module):
         self.conv2 = nn.Conv2d(16, 32, kernel_size=4, stride=2)
         self.bn2 = nn.BatchNorm2d(32)
         self.lin1 = nn.Linear(768, 256)
-        self.head = nn.Linear(256, engine.nb_actions)
+        self.head = nn.Linear(576, engine.nb_actions)
 
     # Forward-propagation 
     def forward(self, x):
