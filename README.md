@@ -19,6 +19,6 @@ Estrutura do Tetris, integração com o [tetr.io](https://uandersonricardo.githu
 ## Equipe 
 - Alexandre Burle    [(aqb)](https://github.com/aqb)
 - Danilo Vaz         [(dvma)](https://github.com/danilovazm)
-- Humberto Lopes     [(hlfs2)](https://google.com)
+- Humberto Lopes     [(hlfs2)](https://github.com/humbertobz26)
 - Matheus Andrade    [(mvtna)](https://github.com/matheusvtna)
 - Uanderson Ricardo  [(urfs)](https://github.com/uandersonricardo)
