@@ -273,7 +273,7 @@ if __name__ == '__main__':
     f = open('log.out', 'w+')
     for i_episode in count(start_epoch):
         # Inicializa o ambiente e recebe o estado inicial
-        state = FloatTensor(engine.clear()[None,None,:,:])
+        state = FloatTensor(engine.start()[None,None,:,:]) if i_episode == 0 else FloatTensor(engine.reset()[None,None,:,:])
 
         score = 0
         for t in count():
