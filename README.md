@@ -21,6 +21,8 @@ Para instalar as dependências, basta executar o script ... **EM CRIAÇÃO**
 Ou, de forma manual, instalar as bibliotecas:
 - [PyTorch](https://pytorch.org/).
 - [NumPy](https://anaconda.org/anaconda/numpy)
+- [Selenium](https://selenium-python.readthedocs.io/)
+- [Webdriver Manager](https://github.com/SergeyPirogov/webdriver_manager)
 
 ## Como Treinar
 Para treinar um agente do zero, basta usar a seguinte linha de comando:

@@ -7,18 +7,18 @@ import random
 # Integração do código usando Selenium para pegar o estado do grid, as variáveis
 # do tetrominó e aplicar
 
-
 # Tetrominós possíveis
-# shapes = {
-#     'T': 
-#     'J': 
-#     'L': 
-#     'Z': 
-#     'S': 
-#     'I': 
-#     'O': 
-# }
-# shape_names = ['T', 'J', 'L', 'Z', 'S', 'I', 'O']
+shapes = {
+    'T': [[0, 1, 0], [1, 1, 1]]
+    'J': [[1, 0, 0], [1, 1, 1]]
+    'L': [[0, 0, 1], [1, 1, 1]]
+    'Z': [[1, 1, 0], [0, 1, 1]]
+    'S': [[0, 1, 1], [1, 1, 0]]
+    'I': [[1, 1, 1, 1]]
+    'O': [[1, 1], [1, 1]]
+}
+
+shape_names = ['T', 'J', 'L', 'Z', 'S', 'I', 'O']
 
 # Funções de movimentação
 # def left(shape, board):
