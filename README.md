@@ -7,13 +7,13 @@ Nesse projeto, a engine de Tetris usada é o [tetr.io](https://uandersonricardo.
 
 ## Estrutura
 ### dqn_agent: 
-Métodos e descrições do agente e estruturas utilizadas para o seu treinamento usando DQN. **OK**
+Métodos e descrições do agente e estruturas utilizadas para o seu treinamento usando DQN.
 
 ### run_model:
-Execução de um modelo já treinado no ambiente. **OK**
+Execução de um modelo já treinado no ambiente.
 
 ### engine:
-Estrutura do Tetris, integração com o [tetr.io](https://uandersonricardo.github.io/tetr.io/) e estruturas do environment. **EM PROGRESSO**
+Estrutura do Tetris, integração com o [tetr.io](https://uandersonricardo.github.io/tetr.io/) e estruturas do environment.
 
 ## Dependências 
 Para instalar as dependências, basta executar o script ... **EM CRIAÇÃO**
