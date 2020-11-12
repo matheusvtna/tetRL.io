@@ -98,6 +98,7 @@ class TetrisEngine:
         self.y = None
         self.shape = None
         self.n_deaths = 0
+        self.current_height = 0
 
         # Reset the game 
         self.interface = TetrioInterface('https://uandersonricardo.github.io/tetr.io/')
@@ -118,14 +119,15 @@ class TetrisEngine:
         # Atualiza as variáveis de estado
         self.shape, self.x, self.y = block['tetromino'], block['x'], block['y']
 
-        # Atualizando tempo e recompensa
+        # Atualizando tempo
         self.time += 1
-        reward, done = self.reward_and_done_flag()
 
         # Lê o estado do grid
         grid = self.interface.get_grid()
-
         state = np.array([[0 if j == None else j for j in i] for i in grid['matrix']])
+
+        # Atualiza a recompensa
+        reward, done = self.reward_and_done_flag(state)
 
         return state, reward, done
 
@@ -149,7 +151,7 @@ class TetrisEngine:
 
         return self.board
 
-    def reward_and_done_flag(self):
+    def reward_and_done_flag(self, grid):
         reward = 0
         done = False
 
@@ -163,11 +165,22 @@ class TetrisEngine:
         # Perdeu o jogo?   Recompensa de -100 e done = True
         # Nada aconteceu?  Recompensa de 0
         if state == 0:
-            reward = 0
+            new_height = -1
+
+            for line in range(len(grid)):
+                if 1 in grid[line]:
+                    new_height = self.height - line
+                    break
+
+            if new_height > self.current_height:
+                reward = -100
+                self.current_height = new_height
+            else:
+                reward = 50
         elif state == 1:
-            reward = 16 * 1 * 10
+            reward = 100
         elif state == 2:
-            reward = -1 * 16 * 10 * 10
+            reward = -100
             done = True
 
         return reward, done

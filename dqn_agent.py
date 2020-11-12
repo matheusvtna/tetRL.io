@@ -43,7 +43,7 @@ Transition = namedtuple('Transition',
 
 #
 # Replay Memory
-# Um buffer cíclico de tamanho limitado que salva as transições obeservadas 
+# Um buffer cíclico de tamanho limitado que salva as transições observadas 
 # recentemente. O método sample aqui desenvolvido seleciona um lote aleatório 
 # para treino.
 #

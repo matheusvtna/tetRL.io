@@ -18,48 +18,94 @@ class TetrioInterface:
   def start(self):
     wait = WebDriverWait(self.driver, 10)
 
-    play_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "play-button")))
-    play_button.click()
+    while(True):
+      try:
+        play_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "play-button")))
+        play_button.click()
 
-    name_input = self.driver.find_element_by_class_name("swal2-input")
-    name_input.send_keys('Robô')
+        name_input = self.driver.find_element_by_class_name("swal2-input")
+        name_input.send_keys('Robô')
 
-    confirm_button = self.driver.find_element_by_class_name("swal2-confirm")
-    confirm_button.click()
+        confirm_button = self.driver.find_element_by_class_name("swal2-confirm")
+        confirm_button.click()
+
+        break
+      except:
+        continue
+      
   
   def reset(self):
     wait = WebDriverWait(self.driver, 10)
 
-    reset_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "reset-button")))
-    reset_button.click()
+    while(True):
+      try:
+        reset_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "reset-button")))
+        reset_button.click()
 
-    name_input = self.driver.find_element_by_class_name("swal2-input")
-    name_input.send_keys('Robô')
+        name_input = self.driver.find_element_by_class_name("swal2-input")
+        name_input.send_keys('Robô')
 
-    confirm_button = self.driver.find_element_by_class_name("swal2-confirm")
-    confirm_button.click()
+        confirm_button = self.driver.find_element_by_class_name("swal2-confirm")
+        confirm_button.click()
+
+        break
+      except:
+        continue
 
   def press(self, key):
-    body = self.driver.find_element_by_tag_name("body")
-    body.send_keys(key)
+    while(True):
+      try:
+        body = self.driver.find_element_by_tag_name("body")
+        body.send_keys(key)
+        break
+      except:
+        continue
 
   def step(self):
-    return self.driver.execute_script("window.step();")
+    while(True):
+      try:
+        return self.driver.execute_script("window.step();")
+      except:
+        continue
 
   def get_grid(self):
-    return self.driver.execute_script("return window.grid;")
+    while(True):
+      try:
+        return self.driver.execute_script("return window.grid;")
+      except:
+        continue
 
   def get_block(self):
-    return self.driver.execute_script("return window.currentBlock;")
+    while(True):
+      try:
+        return self.driver.execute_script("return window.currentBlock;")
+      except:
+        continue
 
   def get_next_block(self):
-    return self.driver.execute_script("return window.nextBlock;")
+    while(True):
+      try:
+        return self.driver.execute_script("return window.nextBlock;")
+      except:
+        continue
 
   def get_player(self):
-    return self.driver.execute_script("return window.player;")
+    while(True):
+      try:
+        return self.driver.execute_script("return window.player;")
+      except:
+        continue
 
   def get_state(self):
-    return self.driver.execute_script("return window.currentState;")
+    while(True):
+      try:
+        return self.driver.execute_script("return window.currentState;")
+      except:
+        continue
 
   def set_speed(self, speed):
-    return self.driver.execute_script("window.setSpeed(" + str(speed) + ");")
+    while(True):
+      try:
+        return self.driver.execute_script("window.setSpeed(" + str(speed) + ");")
+      except:
+        continue
