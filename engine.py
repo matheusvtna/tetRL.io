@@ -176,7 +176,7 @@ class TetrisEngine:
                 reward = -100
                 self.current_height = new_height
             else:
-                reward = 50
+                reward = 0
         elif state == 1:
             reward = 100
         elif state == 2:
