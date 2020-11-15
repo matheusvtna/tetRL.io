@@ -78,7 +78,7 @@ class TetrisEngine:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.board = np.zeros(shape=(width, height), dtype=np.float)
+        self.board = np.zeros(shape=(height, width), dtype=np.float)
 
         # Espaço de ações
         self.value_action_map = {
