@@ -43,11 +43,13 @@ def train(opt):
         torch.cuda.manual_seed(123)
     else:
         torch.manual_seed(123)
+
     if os.path.isdir(opt.log_path):
         shutil.rmtree(opt.log_path)
+
     os.makedirs(opt.log_path)
     writer = SummaryWriter(opt.log_path)
-    env = Tetris(width=opt.width, height=opt.height, block_size=opt.block_size)
+    env = Tetris(width=opt.width, height=opt.height)
     model = DeepQNetwork()
     optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr)
     criterion = nn.MSELoss()
@@ -63,6 +65,7 @@ def train(opt):
 
     while epoch < opt.num_epochs:
         next_steps = env.get_next_states()
+        
         # Exploration or exploitation
         epsilon = opt.final_epsilon + (max(opt.num_decay_epochs - epoch, 0) * (
                 opt.initial_epsilon - opt.final_epsilon) / opt.num_decay_epochs)
@@ -70,11 +73,14 @@ def train(opt):
         random_action = u <= epsilon
         next_actions, next_states = zip(*next_steps.items())
         next_states = torch.stack(next_states)
+
         if torch.cuda.is_available():
             next_states = next_states.cuda()
+
         model.eval()
         with torch.no_grad():
             predictions = model(next_states)[:, 0]
+
         model.train()
         if random_action:
             index = randint(0, len(next_steps) - 1)
@@ -90,7 +96,9 @@ def train(opt):
 
         if torch.cuda.is_available():
             next_state = next_state.cuda()
+
         replay_memory.append([state, reward, next_state, done])
+
         if done:
             final_score = env.score
             final_tetrominoes = env.tetrominoes
@@ -102,9 +110,11 @@ def train(opt):
             print("not done")
             state = next_state
             continue
+
         if len(replay_memory) < opt.replay_memory_size / 10:
             print("replay_memory", len(replay_memory))
             continue
+        
         epoch += 1
         batch = sample(replay_memory, min(len(replay_memory), opt.batch_size))
         state_batch, reward_batch, next_state_batch, done_batch = zip(*batch)

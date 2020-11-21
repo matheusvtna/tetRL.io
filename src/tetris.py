@@ -3,38 +3,13 @@
 """
 import numpy as np
 from PIL import Image
-import cv2
 from matplotlib import style
 import torch
 from src.web_interface import WebInterface
 import random
 import json
 
-style.use("ggplot")
-
-
 class Tetris:
-    piece_colors = [
-        (0, 0, 0),
-        (255, 255, 0),
-        (147, 88, 254),
-        (54, 175, 144),
-        (255, 0, 0),
-        (102, 217, 238),
-        (254, 151, 32),
-        (0, 0, 255)
-    ]
-    
-    piece_colors_2 = [
-        0,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-    ]
 
     pieces = [
         [[1, 1],
@@ -58,13 +33,10 @@ class Tetris:
          [7, 7, 7]]
     ]
 
-    def __init__(self, height=20, width=10, block_size=20):
+    def __init__(self, height=20, width=10):
         self.height = height
         self.width = width
-        self.block_size = block_size
-        self.extra_board = np.ones((self.height * self.block_size, self.width * int(self.block_size / 2), 3),
-                                   dtype=np.uint8) * np.array([204, 204, 255], dtype=np.uint8)
-        self.text_color = (200, 20, 220)
+
         self.interface = WebInterface("http://127.0.0.1:5500")
         self.interface.start()
         self.reset()
@@ -126,6 +98,7 @@ class Tetris:
         states = {}
         piece_id = self.ind
         curr_piece = [row[:] for row in self.piece]
+
         if piece_id == 0:  # O piece
             num_rotations = 1
         elif piece_id == 2 or piece_id == 3 or piece_id == 4:
@@ -135,22 +108,28 @@ class Tetris:
 
         for i in range(num_rotations):
             valid_xs = self.width - len(curr_piece[0])
+
             for x in range(valid_xs + 1):
                 piece = [row[:] for row in curr_piece]
                 pos = {"x": x, "y": 0}
+
                 while not self.check_collision(piece, pos):
                     pos["y"] += 1
+
                 self.truncate(piece, pos)
                 board = self.store(piece, pos)
                 states[(x, i)] = self.get_state_properties(board)
             curr_piece = self.rotate(curr_piece)
+
         return states
 
     def get_current_board_state(self):
         board = [x[:] for x in self.board]
+
         for y in range(len(self.piece)):
             for x in range(len(self.piece[y])):
                 board[y + self.current_pos["y"]][x + self.current_pos["x"]] = self.piece[y][x]
+
         return board
 
     def new_piece(self):
@@ -191,14 +170,17 @@ class Tetris:
                     for x in range(len(piece[y])):
                         if self.board[pos["y"] + y][pos["x"] + x] and piece[y][x] and y > last_collision_row:
                             last_collision_row = y
+
         return gameover
 
     def store(self, piece, pos):
         board = [x[:] for x in self.board]
+
         for y in range(len(piece)):
             for x in range(len(piece[y])):
                 if piece[y][x] and not board[y + pos["y"]][x + pos["x"]]:
                     board[y + pos["y"]][x + pos["x"]] = piece[y][x]
+
         return board
 
     def check_cleared_rows(self, board):
@@ -206,26 +188,31 @@ class Tetris:
         for i, row in enumerate(board[::-1]):
             if 0 not in row:
                 to_delete.append(len(board) - 1 - i)
+
         if len(to_delete) > 0:
             board = self.remove_row(board, to_delete)
+
         return len(to_delete), board
 
     def remove_row(self, board, indices):
         for i in indices[::-1]:
             del board[i]
             board = [[0 for _ in range(self.width)]] + board
+
         return board
 
-    def step(self, action, render=True, video=None):
+    def step(self, action, render=True):
         x, num_rotations = action
         self.current_pos = {"x": x, "y": 0}
+
         for _ in range(num_rotations):
             self.piece = self.rotate(self.piece)
 
         while not self.check_collision(self.piece, self.current_pos):
             self.current_pos["y"] += 1
+            
             if render:
-                self.render(video)
+                self.render()
 
         overflow = self.truncate(self.piece, self.current_pos)
         if overflow:
@@ -254,7 +241,7 @@ class Tetris:
         print("next_states: ", next_states)
         print("next_actions: ", next_actions)
 
-    def render(self, video=None):
+    def render(self):
         if not self.gameover:
             matrix = self.get_current_board_state()
         else:
