@@ -7,33 +7,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
 
-class TetrioInterface:
+class WebInterface:
   def __init__(self, url):
     self.url = url
     self.driver = webdriver.Chrome(ChromeDriverManager().install())
-
-  def navigate(self):
     self.driver.get(self.url)
 
   def start(self):
-    wait = WebDriverWait(self.driver, 10)
-
-    while(True):
-      try:
-        play_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "play-button")))
-        play_button.click()
-
-        name_input = self.driver.find_element_by_class_name("swal2-input")
-        name_input.send_keys('Robô')
-
-        confirm_button = self.driver.find_element_by_class_name("swal2-confirm")
-        confirm_button.click()
-
-        break
-      except:
-        continue
+    return self.driver.execute_script("window.start();")
+    
+  def send(self, json):
+    return self.driver.execute_script("window.render('" + json + "');")
       
-  
   def reset(self):
     wait = WebDriverWait(self.driver, 10)
 
@@ -71,7 +56,7 @@ class TetrioInterface:
   def get_grid(self):
     while(True):
       try:
-        return self.driver.execute_script("return window.grid;")
+        return self.driver.execute_script("return window.grid.matrix;")
       except:
         continue
 
