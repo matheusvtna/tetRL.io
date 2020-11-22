@@ -15,22 +15,22 @@ class Tetris:
         [[1, 1],
          [1, 1]],
 
-        [[0, 2, 0],
-         [2, 2, 2]],
+        [[0, 1, 0],
+         [1, 1, 1]],
 
-        [[0, 3, 3],
-         [3, 3, 0]],
+        [[0, 1, 1],
+         [1, 1, 0]],
 
-        [[4, 4, 0],
-         [0, 4, 4]],
+        [[1, 1, 0],
+         [0, 1, 1]],
 
-        [[5, 5, 5, 5]],
+        [[1, 1, 1, 1]],
 
-        [[0, 0, 6],
-         [6, 6, 6]],
+        [[0, 0, 1],
+         [1, 1, 1]],
 
-        [[7, 0, 0],
-         [7, 7, 7]]
+        [[1, 0, 0],
+         [1, 1, 1]]
     ]
 
     def __init__(self, height=20, width=10):
@@ -128,7 +128,8 @@ class Tetris:
 
         for y in range(len(self.piece)):
             for x in range(len(self.piece[y])):
-                board[y + self.current_pos["y"]][x + self.current_pos["x"]] = self.piece[y][x]
+                if self.piece[y][x]:
+                    board[y + self.current_pos["y"]][x + self.current_pos["x"]] = self.piece[y][x]
 
         return board
 
@@ -180,7 +181,7 @@ class Tetris:
             for x in range(len(piece[y])):
                 if piece[y][x] and not board[y + pos["y"]][x + pos["x"]]:
                     board[y + pos["y"]][x + pos["x"]] = piece[y][x]
-
+    
         return board
 
     def check_cleared_rows(self, board):
@@ -219,12 +220,13 @@ class Tetris:
             self.gameover = True
 
         self.board = self.store(self.piece, self.current_pos)
-
         lines_cleared, self.board = self.check_cleared_rows(self.board)
+
         score = 1 + (lines_cleared ** 2) * self.width
         self.score += score
         self.tetrominoes += 1
         self.cleared_lines += lines_cleared
+
         if not self.gameover:
             self.new_piece()
         if self.gameover:
