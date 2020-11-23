@@ -1,9 +1,4 @@
-"""
-@author: Viet Nguyen <nhviet1009@gmail.com>
-"""
 import numpy as np
-from PIL import Image
-from matplotlib import style
 import torch
 from src.web_interface import WebInterface
 import random
