@@ -3,41 +3,57 @@
 ## Sobre o Projeto
 
 O tetRL.io é o projeto final da disciplina de Introdução à Multimídia, do Centro de Informática da Universidade Federal de Pernambuco, o CIn - UFPE. A ideia do projeto é desenvolver um algoritmo de Reinforcement Learning para um single agent jogar o famoso jogo de Tetris.
-Nesse projeto, a engine de Tetris usada é o [tetr.io](https://uandersonricardo.github.io/tetr.io/), um outro projeto de nossa equipe para a disciplina de Engenharia de Software do CIn. Mais detalhes da implementação do jogo em si estão disponíveis no repositório onde está hospedado o nosso projeto. Para isso, [clique aqui](https://github.com/uandersonricardo/tetr.io).
+Nesse projeto, a engine de Tetris usada é feita pelo próprio código em Python, porém a renderização da interface é feita no Browser. Para isso, utilizamos da base do [tetr.io](https://uandersonricardo.github.io/tetr.io/), um outro projeto de nossa equipe para a disciplina de Engenharia de Software do CIn, e criamos um repositório mais simples que apenas renderizasse o grid do Tetris e apresentasse alguns dados do treinamento da rede, o [web-tetRL.io](https://github.com/uandersonricardo/web-tetRL.io). 
+Mais detalhes da implementação da interface estão disponíveis no repositório onde está hospedado o nosso projeto. Para isso, [clique aqui](https://github.com/uandersonricardo/web-tetRL.io).
 
 ## Estrutura
-### dqn_agent: 
-Métodos e descrições do agente e estruturas utilizadas para o seu treinamento usando DQN.
+### train: 
+Métodos de carregamento e looping de treino da rede neural para a criação de modelos. 
 
-### run_model:
+### test:
 Execução de um modelo já treinado no ambiente.
 
-### engine:
-Estrutura do Tetris, integração com o [tetr.io](https://uandersonricardo.github.io/tetr.io/) e estruturas do environment.
+### tetris:
+Estrutura do Tetris com definição de regras, peças e métodos do environment do aprendizado. 
+
+### web_interface
+Integração com o [web-tetRL.io](https://github.com/uandersonricardo/web-tetRL.io).
+
+### deep_q_network
+Definição e inicialização da arquitetura da rede neural.
 
 ## Dependências 
-Para instalar as dependências, basta executar o script ... **EM CRIAÇÃO**
-
-Ou, de forma manual, instalar as bibliotecas:
 - [PyTorch](https://pytorch.org/).
 - [NumPy](https://anaconda.org/anaconda/numpy)
 - [Selenium](https://selenium-python.readthedocs.io/)
 - [Webdriver Manager](https://github.com/SergeyPirogov/webdriver_manager)
 
 ## Como Treinar
-Para treinar um agente do zero, basta usar a seguinte linha de comando:
+### Um Novo Agente
 ~~~bash
-$ python dqn_agent
+$ python train.py
 ~~~
-Para treinar um agente a partir de um Checkpoint, basta usar a seguinte linha de comando:
+### Agente a partir de um Checkpoint
+
+No arquivo train.py, certifique-se de que os seguintes parâmetros estarão definidos com os valores corretos para o diretório e nome do arquivo, assim como a flag de load definida como True.
+~~~python 
+parser.add_argument("--saved_path", type=str, default="trained_models")
+parser.add_argument("--checkpoint_name", type=str, default="tetris")
+parser.add_argument("--load", type=bool, default=True)
+~~~
+E execute o mesmo comando para um novo treino:
 ~~~bash
-$ python dqn_agent checkpoint
+$ python train.py
 ~~~
 
 ## Como Executar
-Para executar um agente treinado, basta usar a seguinte linha de comando:
+No arquivo test.py, certifique-se de que os seguintes parâmetros estarão definidos com os valores corretos para o diretório e nome do arquivo.
+~~~python     
+parser.add_argument("--saved_path", type=str, default="trained_models")
+parser.add_argument("--checkpoint_file", type=str, default="tetris")
+~~~
 ~~~bash
-$ python run_model checkpoint
+$ python test.py
 ~~~
 
 ## Equipe 

@@ -31,6 +31,7 @@ class Tetris:
     def __init__(self, height=20, width=10):
         self.height = height
         self.width = width
+        self.current_step = 0
 
         self.interface = WebInterface("http://127.0.0.1:5500")
         self.interface.start()
@@ -47,6 +48,7 @@ class Tetris:
         self.piece = [row[:] for row in self.pieces[self.ind]]
         self.current_pos = {"x": self.width // 2 - len(self.piece[0]) // 2, "y": 0}
         self.gameover = False
+        self.info = {}
         return self.get_state_properties(self.board)
 
     def rotate(self, piece):
@@ -204,6 +206,8 @@ class Tetris:
         for _ in range(num_rotations):
             self.piece = self.rotate(self.piece)
 
+        self.current_step += 1
+
         while not self.check_collision(self.piece, self.current_pos):
             self.current_pos["y"] += 1
             
@@ -229,26 +233,21 @@ class Tetris:
 
         return score, self.gameover
 
-    def updateInfo(self, epoch, loss, random, index, predictions, next_states, next_actions):
-        print("epoch: ", epoch)
-        print("loss: ", loss)
-        print("random: ", random)
-        print("index: ", index)
-        print("predictions: ", predictions)
-        print("next_states: ", next_states)
-        print("next_actions: ", next_actions)
-
     def render(self):
         if not self.gameover:
             matrix = self.get_current_board_state()
         else:
             matrix = self.board
 
+        state = np.asarray(self.get_state_properties(self.board)).tolist()
+
         data = {
             "matrix": matrix,
             "tetrominoes": self.tetrominoes,
             "reward": self.score,
-            "score": self.cleared_lines
+            "score": self.cleared_lines,
+            "step": self.current_step,
+            "state": state
         }
 
         self.interface.send(json.dumps(data))

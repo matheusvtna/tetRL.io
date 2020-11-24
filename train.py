@@ -120,9 +120,6 @@ def train(opt):
         next_state = next_states[index, :]
         action = next_actions[index]
 
-        # Atualiza Informações - Interface Web
-        env.updateInfo(epoch, prev_loss, random_action, index, predictions, next_states, next_actions)
-
         reward, done = env.step(action, render=True)
 
         if torch.cuda.is_available():
