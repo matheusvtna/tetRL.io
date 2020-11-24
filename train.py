@@ -24,31 +24,58 @@ def get_args():
     parser.add_argument("--final_epsilon", type=float, default=1e-3)
     parser.add_argument("--num_decay_epochs", type=float, default=2000)
     parser.add_argument("--num_epochs", type=int, default=3000)
-    parser.add_argument("--save_interval", type=int, default=1000)
+    parser.add_argument("--save_interval", type=int, default=500)
     parser.add_argument("--replay_memory_size", type=int, default=30000,
                         help="Number of epoches between testing phases")
     parser.add_argument("--log_path", type=str, default="tensorboard")
     parser.add_argument("--saved_path", type=str, default="trained_models")
+    parser.add_argument("--saved_name", type=str, default="tetris")
+    parser.add_argument("--checkpoint_name", type=str, default="tetris")
+    parser.add_argument("--load", type=bool, default=True)
 
     args = parser.parse_args()
     return args
 
 
 def train(opt):
+
     if torch.cuda.is_available():
         torch.cuda.manual_seed(123)
     else:
         torch.manual_seed(123)
 
+    # TensorBoard
     if os.path.isdir(opt.log_path):
         shutil.rmtree(opt.log_path)
 
     os.makedirs(opt.log_path)
     writer = SummaryWriter(opt.log_path)
-    env = Tetris(width=opt.width, height=opt.height)
-    model = DeepQNetwork()
+    
+    # Modelo
+    CHECKPOINT_FILE = opt.saved_path + "/" + opt.checkpoint_name
+
+    if opt.load:
+        if os.path.isfile(CHECKPOINT_FILE):
+            print("--> Carregando Checkpoint '{}'.".format(CHECKPOINT_FILE))
+            
+            if torch.cuda.is_available():
+                model = torch.load(CHECKPOINT_FILE)
+            else:
+                model = torch.load(CHECKPOINT_FILE, map_location=lambda storage, loc: storage)
+            
+            print("--> Checkpoint Carregado '{}'.".format(CHECKPOINT_FILE))
+
+        else:
+            print("--> Checkpoint '{}' não encontrado.".format(CHECKPOINT_FILE))
+            model = DeepQNetwork()
+    else:
+        model = DeepQNetwork()
+
     optimizer = torch.optim.Adam(model.parameters(), lr=opt.lr)
     criterion = nn.MSELoss()
+
+    # Environment
+    env = Tetris(width=opt.width, height=opt.height)
 
     state = env.reset()
     if torch.cuda.is_available():
@@ -59,10 +86,17 @@ def train(opt):
     epoch = 0
     prev_loss = 0
 
+    # Épocas do Checkpoint
+    if "_" in opt.checkpoint_name:
+        start_epoch = opt.checkpoint_name.split("_")[1]
+        epoch = int(start_epoch)
+
+
+    # Loop de Treino
     while epoch < opt.num_epochs:
         next_steps = env.get_next_states()
         
-        # Exploration or exploitation
+        # Exploração ou Explotação
         epsilon = opt.final_epsilon + (max(opt.num_decay_epochs - epoch, 0) * (
                 opt.initial_epsilon - opt.final_epsilon) / opt.num_decay_epochs)
         u = random()
@@ -101,12 +135,12 @@ def train(opt):
             if torch.cuda.is_available():
                 state = state.cuda()
         else:
-            print("not done")
             state = next_state
             continue
 
+        # Replay Buffer
         if len(replay_memory) < opt.replay_memory_size / 10:
-            print("replay_memory", len(replay_memory))
+            print("replay_memory ", len(replay_memory))
             continue
         
         epoch += 1
@@ -116,6 +150,7 @@ def train(opt):
         reward_batch = torch.from_numpy(np.array(reward_batch, dtype=np.float32)[:, None])
         next_state_batch = torch.stack(tuple(state for state in next_state_batch))
 
+        # Aprendizado
         if torch.cuda.is_available():
             state_batch = state_batch.cuda()
             reward_batch = reward_batch.cuda()
@@ -150,9 +185,9 @@ def train(opt):
         writer.add_scalar('Train/Cleared lines', final_cleared_lines, epoch - 1)
 
         if epoch > 0 and epoch % opt.save_interval == 0:
-            torch.save(model, "{}/tetris_{}".format(opt.saved_path, epoch))
+            torch.save(model, "{}/{}_{}".format(opt.saved_path, opt.saved_name, epoch))
 
-    torch.save(model, "{}/tetris".format(opt.saved_path))
+    torch.save(model, "{}/{}".format(opt.saved_path, opt.saved_name))
 
 if __name__ == "__main__":
     opt = get_args()
