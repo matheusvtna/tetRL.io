@@ -35,7 +35,7 @@ def test(opt):
     if torch.cuda.is_available():
         model = torch.load("{}/{}".format(opt.saved_path, opt.checkpoint_file))
     else:
-        model = torch.load("{}/{}}".format(opt.saved_path, opt.checkpoint_file), map_location=lambda storage, loc: storage)
+        model = torch.load("{}/{}".format(opt.saved_path, opt.checkpoint_file), map_location=lambda storage, loc: storage)
     
     model.eval()
     env = Tetris(width=opt.width, height=opt.height)

@@ -24,12 +24,13 @@ def get_args():
     parser.add_argument("--final_epsilon", type=float, default=1e-3)
     parser.add_argument("--num_decay_epochs", type=float, default=2000)
     parser.add_argument("--num_epochs", type=int, default=3000)
-    parser.add_argument("--save_interval", type=int, default=1000)
+    parser.add_argument("--save_interval", type=int, default=500)
     parser.add_argument("--replay_memory_size", type=int, default=30000,
                         help="Number of epoches between testing phases")
     parser.add_argument("--log_path", type=str, default="tensorboard")
     parser.add_argument("--saved_path", type=str, default="trained_models")
-    parser.add_argument("--checkpoint_name", type=str, default="tetris_1000")
+    parser.add_argument("--saved_name", type=str, default="tetris")
+    parser.add_argument("--checkpoint_name", type=str, default="tetris")
     parser.add_argument("--load", type=bool, default=True)
 
     args = parser.parse_args()
@@ -50,8 +51,9 @@ def train(opt):
     os.makedirs(opt.log_path)
     writer = SummaryWriter(opt.log_path)
     
-    # Model
-    CHECKPOINT_FILE = "trained_models/" + opt.checkpoint_name
+    # Modelo
+    CHECKPOINT_FILE = opt.saved_path + "/" + opt.checkpoint_name
+
     if opt.load:
         if os.path.isfile(CHECKPOINT_FILE):
             print("--> Carregando Checkpoint '{}'.".format(CHECKPOINT_FILE))
@@ -59,11 +61,10 @@ def train(opt):
             if torch.cuda.is_available():
                 model = torch.load(CHECKPOINT_FILE)
             else:
-                checkpoint = torch.load(CHECKPOINT_FILE)
                 model = torch.load(CHECKPOINT_FILE, map_location=lambda storage, loc: storage)
-                start_epoch = checkpoint['epoch']
+            
+            print("--> Checkpoint Carregado '{}'.".format(CHECKPOINT_FILE))
 
-                print("--> Checkpoint Carregado '{}' (epoch {}).".format(CHECKPOINT_FILE, start_epoch))
         else:
             print("--> Checkpoint '{}' não encontrado.".format(CHECKPOINT_FILE))
             model = DeepQNetwork()
@@ -84,6 +85,12 @@ def train(opt):
     replay_memory = deque(maxlen=opt.replay_memory_size)
     epoch = 0
     prev_loss = 0
+
+    # Épocas do Checkpoint
+    if "_" in opt.checkpoint_name:
+        start_epoch = opt.checkpoint_name.split("_")[1]
+        epoch = int(start_epoch)
+
 
     # Loop de Treino
     while epoch < opt.num_epochs:
@@ -181,9 +188,9 @@ def train(opt):
         writer.add_scalar('Train/Cleared lines', final_cleared_lines, epoch - 1)
 
         if epoch > 0 and epoch % opt.save_interval == 0:
-            torch.save(model, "{}/{}_{}".format(opt.saved_path, opt.checkpoint_name, epoch))
+            torch.save(model, "{}/{}_{}".format(opt.saved_path, opt.saved_name, epoch))
 
-    torch.save(model, "{}/{}".format(opt.saved_path, opt.checkpoint_name))
+    torch.save(model, "{}/{}".format(opt.saved_path, opt.saved_name))
 
 if __name__ == "__main__":
     opt = get_args()
