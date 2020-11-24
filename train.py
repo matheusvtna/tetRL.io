@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument("--log_path", type=str, default="tensorboard")
     parser.add_argument("--saved_path", type=str, default="trained_models")
     parser.add_argument("--checkpoint_name", type=str, default="tetris")
-    parser.add_argument("--load", type=bool, default=True)
+    parser.add_argument("--load", type=bool, default=False)
 
     args = parser.parse_args()
     return args
@@ -181,9 +181,9 @@ def train(opt):
         writer.add_scalar('Train/Cleared lines', final_cleared_lines, epoch - 1)
 
         if epoch > 0 and epoch % opt.save_interval == 0:
-            torch.save(model, "{}/tetris_{}".format(opt.saved_path, epoch))
+            torch.save(model, "{}/{}_{}".format(opt.saved_path, opt.checkpoint_name, epoch))
 
-    torch.save(model, "{}/tetris".format(opt.saved_path))
+    torch.save(model, "{}/{}".format(opt.saved_path, opt.checkpoint_name))
 
 if __name__ == "__main__":
     opt = get_args()
