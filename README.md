@@ -37,9 +37,10 @@ $ python train.py
 
 No arquivo train.py, certifique-se de que os seguintes parâmetros estarão definidos com os valores corretos para o diretório e nome do arquivo, assim como a flag de load definida como True.
 ~~~python 
-parser.add_argument("--saved_path", type=str, default="trained_models")
-parser.add_argument("--checkpoint_name", type=str, default="tetris")
-parser.add_argument("--load", type=bool, default=True)
+parser.add_argument("--saved_path", type=str, default="trained_models")  # Diretório de salvamento 
+parser.add_argument("--saved_name", type=str, default="tetris")          # Arquivo de salvamento
+parser.add_argument("--checkpoint_name", type=str, default="tetris")     # Arquivo de carregamento
+parser.add_argument("--load", type=bool, default=True)                   # Flag para carregamento
 ~~~
 E execute o mesmo comando para um novo treino:
 ~~~bash
@@ -62,3 +63,6 @@ $ python test.py
 - Humberto Lopes     [(hlfs2)](https://github.com/humbertobz26)
 - Matheus Andrade    [(mvtna)](https://github.com/matheusvtna)
 - Uanderson Ricardo  [(urfs)](https://github.com/uandersonricardo)
+
+## Créditos
+O projeto foi fortemente inspirado pelo código disponibilizado por Viet Nguyen, sob a [licença MIT](https://github.com/uvipen/Tetris-deep-Q-learning-pytorch/blob/master/LICENSE). Gostaríamos de deixar explícito nossos agradecimentos ao autor. [Clique aqui](https://github.com/uvipen/Tetris-deep-Q-learning-pytorch) para visitar o Github do projeto base.
