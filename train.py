@@ -29,8 +29,8 @@ def get_args():
                         help="Number of epoches between testing phases")
     parser.add_argument("--log_path", type=str, default="tensorboard")
     parser.add_argument("--saved_path", type=str, default="trained_models")
-    parser.add_argument("--checkpoint_name", type=str, default="tetris")
-    parser.add_argument("--load", type=bool, default=False)
+    parser.add_argument("--checkpoint_name", type=str, default="tetris_1000")
+    parser.add_argument("--load", type=bool, default=True)
 
     args = parser.parse_args()
     return args
