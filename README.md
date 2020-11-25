@@ -50,8 +50,8 @@ $ python train.py
 ## Como Executar
 No arquivo test.py, certifique-se de que os seguintes parâmetros estarão definidos com os valores corretos para o diretório e nome do arquivo.
 ~~~python     
-parser.add_argument("--saved_path", type=str, default="trained_models")
-parser.add_argument("--checkpoint_file", type=str, default="tetris")
+parser.add_argument("--saved_path", type=str, default="trained_models")  # Diretório de carregamento
+parser.add_argument("--checkpoint_file", type=str, default="tetris")     # Arquivo de carregamento
 ~~~
 ~~~bash
 $ python test.py
