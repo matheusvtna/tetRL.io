@@ -12,7 +12,7 @@ def get_args():
     parser.add_argument("--height", type=int, default=20, help="The common height for all images")
     parser.add_argument("--fps", type=int, default=300, help="frames per second")
     parser.add_argument("--saved_path", type=str, default="trained_models")
-    parser.add_argument("--checkpoint_file", type=str, default="tetris")
+    parser.add_argument("--checkpoint_file", type=str, default="tetris_2000")
 
     args = parser.parse_args()
     return args

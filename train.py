@@ -24,14 +24,14 @@ def get_args():
     parser.add_argument("--final_epsilon", type=float, default=1e-3)
     parser.add_argument("--num_decay_epochs", type=float, default=2000)
     parser.add_argument("--num_epochs", type=int, default=3000)
-    parser.add_argument("--save_interval", type=int, default=500)
+    parser.add_argument("--save_interval", type=int, default=1000)
     parser.add_argument("--replay_memory_size", type=int, default=30000,
                         help="Number of epoches between testing phases")
     parser.add_argument("--log_path", type=str, default="tensorboard")
     parser.add_argument("--saved_path", type=str, default="trained_models")
-    parser.add_argument("--saved_name", type=str, default="tetris")
-    parser.add_argument("--checkpoint_name", type=str, default="tetris")
-    parser.add_argument("--load", type=bool, default=True)
+    parser.add_argument("--saved_name", type=str, default="tetris_v2")
+    parser.add_argument("--checkpoint_name", type=str, default="tetris_2000")
+    parser.add_argument("--load", type=bool, default=False)
 
     args = parser.parse_args()
     return args
@@ -87,9 +87,10 @@ def train(opt):
     prev_loss = 0
 
     # Épocas do Checkpoint
-    if "_" in opt.checkpoint_name:
-        start_epoch = opt.checkpoint_name.split("_")[1]
+    if opt.load and "_" in opt.checkpoint_name:
+        start_epoch = opt.checkpoint_name.split("_")[-1]
         epoch = int(start_epoch)
+        print("Checkpoint com {} épocas.".format(epoch))
 
 
     # Loop de Treino
